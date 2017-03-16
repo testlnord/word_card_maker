@@ -1,2 +1,2 @@
-# word_card_maker
+# Word Card Maker
 Flash cards from your browser
