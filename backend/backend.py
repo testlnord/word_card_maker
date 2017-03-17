@@ -21,9 +21,9 @@ def yandex_translate(word: str) -> str:
 class Translator(Resource):
     def get(self):
         word: str = parser.parse_args()['word']
-        return {word: yandex_translate(word)}
+        return {'word': word, 'translation': yandex_translate(word)}
 
-api.add_resource(Translator, '/translate')
+api.add_resource(Translator, '/dict/translation')
 
 if __name__ == '__main__':
     app.run(debug=True)
