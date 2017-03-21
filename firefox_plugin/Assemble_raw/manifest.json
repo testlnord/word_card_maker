@@ -1,0 +1,30 @@
+{
+
+  "manifest_version": 2,
+  "name": "StaticCard",
+  "version": "1.0",
+
+  "description": "Tries to meet the goals using different techniques",
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "icons": {
+    "48": "icons/border-48.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.bash.im/*"],
+      "js": ["DoubleClickDec.js"]
+    }
+  ],
+
+  "permissions": ["*://developer.mozilla.org/*", "tabs", "contextMenus", "activeTab"],
+
+  "web_accessible_resources": [
+    "beasts/snake.jpg"
+  ]
+
+}
