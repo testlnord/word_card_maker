@@ -39,6 +39,11 @@ function handleDoubleClick() {
     divf.style.color = "white";
     divf.style.visibility = "visible";
     divf.innerHTML = html;
+    divf.style.position = 'absolute'
+
+    var scroll = document.documentElement.scrollTop || document.body.scrollTop
+
+    divf.style.top = scroll + 10 + 'px'
     //while (document.body.firstChild) {
     //document.body.firstChild.remove();
     //}
