@@ -24,7 +24,7 @@
   "permissions": ["*://developer.mozilla.org/*", "tabs", "contextMenus", "activeTab"],
 
   "web_accessible_resources": [
-    "beasts/snake.jpg"
+    "pictures/card.jpg"
   ]
 
 }

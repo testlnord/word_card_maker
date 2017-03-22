@@ -48,17 +48,17 @@ browser.contextMenus.create({
 }, onCreated);
 
 browser.contextMenus.create({
-  id: "greenify",
+  id: "changeColor",
   type: "radio",
-  title: "greenify",
+  title: "changeColor",
   contexts: ["all"],
   checked: true
 }, onCreated);
 
 browser.contextMenus.create({
-  id: "bluify",
+  id: "picturesque",
   type: "radio",
-  title: "bluify",
+  title: "picturesque",
   contexts: ["all"],
   checked: false
 }, onCreated);
@@ -93,6 +93,21 @@ function borderify(tabId, color) {
   });
 }
 
+
+/*
+ * A port to communicate with DoubleClickDec
+*/
+var portFromDoubleClickDec;
+function connected(p) {
+  portFromDoubleClickDec = p;
+  portFromDoubleClickDec.postMessage({message: "hi there content script!"});
+  portFromDoubleClickDec.onMessage.addListener(function(m) {
+    console.log("In background script, received message from content script")
+    console.log(m.message);
+  });
+}
+browser.runtime.onConnect.addListener(connected);
+
 /*
 Toggle checkedState, and update the menu item's title
 appropriately.
@@ -126,20 +141,21 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
       var removing = browser.contextMenus.remove(info.menuItemId);
       removing.then(onRemoved, onError);
       break;
-    case "bluify":
+    case "picturesque":
       borderify(tab.id, blue);
-      chosenBeastURL = browser.extension.getURL("beasts/snake.jpg");
+      chosenPictureURL = browser.extension.getURL("pictures/card.jpg");
       browser.tabs.executeScript(null, { 
-      file: "beastify.js" 
+      file: "pictureShow.js" 
     });
 
     var gettingActiveTab = browser.tabs.query({active: true, currentWindow: true});
     gettingActiveTab.then((tabs) => {
-      browser.tabs.sendMessage(tabs[0].id, {beastURL: chosenBeastURL});
+      browser.tabs.sendMessage(tabs[0].id, {pictureURL: chosenPictureURL});
     });
       break;
-    case "greenify":
+    case "changeColor":
       borderify(tab.id, green);
+      portFromDoubleClickDec.postMessage({message: "lumos!"});
       //$.getScript("borderify.js",function(){
         //html = sendHTMLSelected();
         //console.log(html);
@@ -151,3 +167,8 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
   }
 });
 
+
+
+// browser.browserAction.onClicked.addListener(function() {
+//   portFromDoubleClickDec.postMessage({greeting: "they clicked the button!"});
+// });
