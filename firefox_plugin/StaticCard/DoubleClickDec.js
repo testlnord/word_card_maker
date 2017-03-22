@@ -44,9 +44,6 @@ function handleDoubleClick() {
     var scroll = document.documentElement.scrollTop || document.body.scrollTop
 
     divf.style.top = scroll + 10 + 'px'
-    //while (document.body.firstChild) {
-    //document.body.firstChild.remove();
-    //}
 
     myPort.postMessage({message: "new card!"})
     if (document.body.contains(currentDiv)) {
@@ -55,26 +52,8 @@ function handleDoubleClick() {
     } else {
       currentDiv = document.body.appendChild(divf);
     }
-    //var htmlNode = document.createElement('span');
-    //htmlNode.innerHTML = html;
-    //htmlNode.className = 'treehtml';
-    //htmlNode.setAttribute('title', 'some_title');
-     //while (document.body.firstChild) {
-    //document.body.firstChild.remove();
-    //}
-    //getElementById("bluify").appendChild(htmlNode);
-    //removeEverything();
-    //self.postMessage(
-      //  JSON.stringify({
-        //    plain: window.getSelection()
-          //      .toString(),
-            //html: html
-        //})
-    //);
+
     console.log(html);
-    //browser.contextMenus.create(
-    //createProperties) // object
-    //function() {...}  // optional function
 };
 
 function handleKeyDown () {
@@ -87,10 +66,3 @@ window.addEventListener("dblclick",
     }, false);
 
 
-
-
-
-//window.addEventListener("onkeypress",
-  //  function() {
-    //    handleKeyDown()
-    //}, false);

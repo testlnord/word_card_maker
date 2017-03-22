@@ -156,10 +156,6 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
     case "changeColor":
       borderify(tab.id, green);
       portFromDoubleClickDec.postMessage({message: "lumos!"});
-      //$.getScript("borderify.js",function(){
-        //html = sendHTMLSelected();
-        //console.log(html);
-      //});
       break;
     case "check-uncheck":
       updateCheckUncheck();
@@ -167,8 +163,3 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
   }
 });
 
-
-
-// browser.browserAction.onClicked.addListener(function() {
-//   portFromDoubleClickDec.postMessage({greeting: "they clicked the button!"});
-// });

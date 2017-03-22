@@ -16,7 +16,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://*.bash.im/*"],
+      "matches": ["*://*.wikipedia.org/*"],
       "js": ["DoubleClickDec.js"]
     }
   ],

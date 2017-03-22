@@ -1,9 +1,3 @@
-/*
-pictureShow():
-* removes every node in the document.body,
-* then inserts the chosen picture
-* then removes itself as a listener
-*/
 function pictureShow(request, sender, sendResponse) {
   removeEverything();
   insertPicture(request.pictureURL);
