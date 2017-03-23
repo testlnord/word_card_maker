@@ -13,6 +13,8 @@ parser.add_argument('word', type=str, required=True, help='Word for translation 
 parser.add_argument('translation', type=str)
 parser.add_argument('context', type=str)
 
+methods = database_methods.DatabaseMethods(settings.DB_USER, settings.DB_PASSWORD, "localhost", settings.DB_NAME)
+
 
 def yandex_translate(word: str) -> str:
     params: Dict[str, str] = {'key': settings.API_KEY,
@@ -32,7 +34,7 @@ class Cards(Resource):
         word: str = parser.parse_args()['word']
         translation: str = parser.parse_args()['translation']
         context: str = parser.parse_args()['context']
-        database_methods.insert_card(word, translation, context, 'Public deck')
+        methods.insert_card(word, translation, context, 'Public deck')
         return {'word': word, 'translation': translation, 'context': context}
 
 api.add_resource(Translator, '/dict/translation')

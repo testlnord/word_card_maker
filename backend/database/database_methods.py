@@ -1,12 +1,13 @@
 import psycopg2 as pg_driver
-import settings
 
-db = pg_driver.connect(user=settings.DB_USER, password=settings.DB_PASSWORD, host="localhost", dbname=settings.DB_NAME)
-cur = db.cursor()
+class DatabaseMethods:
 
+    def __init__(self, db_user: str, db_password: str, db_host: str, db_name: str):
+        self.db = pg_driver.connect(user=db_user, password=db_password, host=db_host, dbname=db_name)
 
-def insert_card(word: str, translation: str, context: str, deck: str):
-    command: str = "INSERT INTO Card(word,translation,context,deck_id) VALUES('{}', '{}', '{}', " \
-                   "(SELECT id FROM Deck WHERE name='{}'))".format(word, translation, context, deck)
-    cur.execute(command)
-    db.commit()
+    def insert_card(self, word: str, translation: str, context: str, deck: str):
+        command: str = "INSERT INTO Card(word,translation,context,deck_id) VALUES('{}', '{}', '{}', " \
+                       "(SELECT id FROM Deck WHERE name='{}'))".format(word, translation, context, deck)
+        with self.db.cursor() as cur:
+            cur.execute(command)
+        self.db.commit()
