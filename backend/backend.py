@@ -1,5 +1,5 @@
 import requests
-from typing import Dict, List
+from typing import Dict
 from flask import Flask
 from flask_restful import reqparse, Resource, Api
 import settings

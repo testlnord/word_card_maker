@@ -1,5 +1,6 @@
 import psycopg2 as pg_driver
 
+
 class DatabaseMethods:
 
     def __init__(self, db_user: str, db_password: str, db_host: str, db_name: str):
@@ -8,6 +9,9 @@ class DatabaseMethods:
     def insert_card(self, word: str, translation: str, context: str, deck: str):
         command: str = "INSERT INTO Card(word,translation,context,deck_id) VALUES('{}', '{}', '{}', " \
                        "(SELECT id FROM Deck WHERE name='{}'))".format(word, translation, context, deck)
-        with self.db.cursor() as cur:
+
+        cur = self.db.cursor()
+        try:
             cur.execute(command)
-        self.db.commit()
+        finally:
+            self.db.commit()
