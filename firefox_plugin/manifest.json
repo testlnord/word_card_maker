@@ -21,10 +21,20 @@
     }
   ],
 
-  "permissions": ["*://developer.mozilla.org/*", "tabs", "contextMenus", "activeTab"],
+  "browser_action": {
+    "default_icon": "icons/note-32.png",
+    "default_title": "Translate"
+    //"default_popup": "popup/choose_beast.html"
+  },
+
+  "permissions": ["*://developer.mozilla.org/*", "tabs", "contextMenus", "activeTab", "storage"],
 
   "web_accessible_resources": [
     "pictures/card.jpg"
-  ]
+  ],
+
+  "options_ui": {
+    "page": "options.html"
+  }
 
 }
