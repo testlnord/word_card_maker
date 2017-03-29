@@ -41,4 +41,4 @@ api.add_resource(Translator, '/dict/translation')
 api.add_resource(Cards, '/cards/add')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=settings.SERVER_PORT)
