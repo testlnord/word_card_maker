@@ -25,7 +25,7 @@ myPort.onMessage.addListener(function(m) {
   console.log("In content script, received message from background script: ");
   console.log(m.message);
   if (m.message === "lumos!") {
-      currentDiv.style.background = "blue";
+      currentDiv.style.visibility = "visible";
   }
 });
 
@@ -52,13 +52,19 @@ function handleDoubleClick() {
     }
 
     var divf = document.createElement("div");
-    divf.style.width = "100px";
+    divf.style.width = "150px";
     divf.style.height = "fit-content";
-    divf.style.background = "red";
-    divf.style.color = "white";
-    divf.style.visibility = "visible";
-    divf.innerHTML = html + "\nTranslation" + surroundings;
+    divf.style.background = "blue";
+    divf.style.color = "black";
+    divf.style.visibility = "hidden";
+    var text = String(html);
+    var re = new RegExp("[^\.\?!]*" + text + "[^\.\?!]*\.");
+    var surroundingsString = String(surroundings);
+    var sentence = re.exec(surroundingsString);
+    var oneSentence = sentence[0];
+    divf.innerHTML = html + "\nTranslation" + oneSentence;
     divf.style.position = 'absolute';
+    //divf.style.opacity = "0.5";
 
     var scroll = document.documentElement.scrollTop || document.body.scrollTop;
 
@@ -73,8 +79,12 @@ function handleDoubleClick() {
     }
 
     //console.log(html);
-    var text = String(html);
-    console.log(text);
+    //var text = String(html);
+    //console.log(text);
+    //var re = new RegExp("[^\.\?!]*" + text + "[^\.\?!]*\.");
+    //var surroundingsString = String(surroundings);
+    //var sentence = re.exec(surroundingsString);
+    //var oneSentence = sentence[0];
     //console.log(html.stripTags());
 };
 

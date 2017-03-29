@@ -48,9 +48,9 @@ browser.contextMenus.create({
 }, onCreated);
 
 browser.contextMenus.create({
-  id: "changeColor",
+  id: "showCard",
   type: "radio",
-  title: "changeColor",
+  title: "showCard",
   contexts: ["all"],
   checked: true
 }, onCreated);
@@ -153,7 +153,7 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
       browser.tabs.sendMessage(tabs[0].id, {pictureURL: chosenPictureURL});
     });
       break;
-    case "changeColor":
+    case "showCard":
       borderify(tab.id, green);
       portFromDoubleClickDec.postMessage({message: "lumos!"});
       break;
