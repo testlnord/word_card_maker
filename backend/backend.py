@@ -17,6 +17,9 @@ parser.add_argument('translation', type=str)
 parser.add_argument('context', type=str)
 parser.add_argument('deck', type=str)
 
+langparser = reqparse.RequestParser()
+langparser.add_argument('lang', type=str, required=True, help='Language cannot be blank')
+
 methods = database_methods.DatabaseMethods(settings.DB_USER, settings.DB_PASSWORD, "localhost", settings.DB_NAME)
 
 
@@ -36,17 +39,19 @@ app.config['SECRET_KEY'] = settings.SECRET_KEY
 jwt = JWT(app, authenticate, identity)
 
 
-def yandex_translate(word: str) -> str:
+def yandex_translate(word: str, lang: str) -> str:
     params: Dict[str, str] = {'key': settings.API_KEY,
-                              'lang': 'en-ru', 'text': word}
+                              'lang': lang, 'text': word}
     response = requests.get("https://dictionary.yandex.net/api/v1/dicservice.json/lookup", params=params).json()
     return response['def'][0]['tr'][0]['text']
 
 
 class Translator(Resource):
+    decorators = [jwt_required()]
+
     def get(self):
         word: str = parser.parse_args()['word']
-        return {'word': word, 'translation': yandex_translate(word)}
+        return {'word': word, 'translation': yandex_translate(word, methods.get_language_by_id(current_identity.id))}
 
 
 class Cards(Resource):
@@ -68,8 +73,18 @@ class Cards(Resource):
         return {'word': word, 'translation': translation, 'context': context}
 
 
+class Language(Resource):
+    decorators = [jwt_required()]
+
+    def post(self):
+        lang: str = langparser.parse_args()['lang']
+        methods.set_language(current_identity.username, lang)
+
+        return {'lang': lang}
+
 api.add_resource(Translator, '/dict/translation')
 api.add_resource(Cards, '/cards/add')
+api.add_resource(Language, '/settings/language')
 
 if __name__ == '__main__':
     app.run(debug=True, port=settings.SERVER_PORT)

@@ -3,6 +3,7 @@ from werkzeug.security import safe_str_cmp
 import hashlib
 import user_methods
 
+
 class DatabaseMethods:
 
     def __init__(self, db_user: str, db_password: str, db_host: str, db_name: str):
@@ -43,6 +44,7 @@ class DatabaseMethods:
             self.db.commit()
             cur.close()
         self.add_deck(username)
+        self.__set_language(username, "en-ru")
 
     def __get_user(self, username) -> (str, str, str):
 
@@ -103,3 +105,38 @@ class DatabaseMethods:
             self.db.commit()
             cur.close()
         return has_rights
+
+    def __set_language(self, username: str, language: str):
+        command: str = "INSERT INTO Settings(user_id, language) VALUES((SELECT id FROM Users WHERE login='{}'), '{}')"\
+            .format(username, language)
+        cur = self.db.cursor()
+
+        try:
+            cur.execute(command)
+        finally:
+            self.db.commit()
+            cur.close()
+
+    def set_language(self, username: str, language: str):
+        command: str = "UPDATE Settings SET language = '{}' WHERE user_id=(SELECT id FROM Users WHERE login='{}')".\
+            format(language, username)
+        cur = self.db.cursor()
+
+        try:
+            cur.execute(command)
+        finally:
+            self.db.commit()
+            cur.close()
+
+    def get_language_by_id(self, user_id: str) -> str:
+        command: str = "SELECT language FROM Settings WHERE user_id='{}'".format(user_id)
+        lang = ""
+        cur = self.db.cursor()
+
+        try:
+            cur.execute(command)
+            lang = cur.fetchone()[0]
+        finally:
+            self.db.commit()
+            cur.close()
+        return lang

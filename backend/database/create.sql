@@ -25,7 +25,8 @@ CREATE TABLE Card(
 
 CREATE TABLE Settings(
   id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL REFERENCES Users
+  user_id INT NOT NULL REFERENCES Users,
+  language TEXT NOT NULL
 );
 
 INSERT INTO Users(login) VALUES ('Public');
