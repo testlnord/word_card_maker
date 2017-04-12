@@ -20,7 +20,8 @@ parser.add_argument('deck', type=str)
 langparser = reqparse.RequestParser()
 langparser.add_argument('lang', type=str, required=True, help='Language cannot be blank')
 
-methods = database_methods.DatabaseMethods(settings.DB_USER, settings.DB_PASSWORD, "localhost", settings.DB_NAME)
+methods = database_methods.DatabaseMethods(settings.DB_USER, settings.DB_PASSWORD, settings.DB_HOST, settings.DB_NAME,
+                                           settings.DB_PORT)
 
 
 def authenticate(username, password):
@@ -87,4 +88,4 @@ api.add_resource(Cards, '/cards/add')
 api.add_resource(Language, '/settings/language')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=settings.SERVER_PORT)
+    app.run(debug=True, port=settings.SERVER_PORT, host=settings.SERVER_HOST)

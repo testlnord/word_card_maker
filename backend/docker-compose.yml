@@ -1,0 +1,13 @@
+version: '2'
+services:
+   db:
+     image: postgres
+   web:
+     build: .
+     command: bash -c "python create_db.py && python backend.py"
+     volumes:
+       - .:/code
+     ports:
+       - "5000:5000"
+     depends_on:
+       - db

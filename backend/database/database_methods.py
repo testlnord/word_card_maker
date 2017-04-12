@@ -6,8 +6,8 @@ import user_methods
 
 class DatabaseMethods:
 
-    def __init__(self, db_user: str, db_password: str, db_host: str, db_name: str):
-        self.db = pg_driver.connect(user=db_user, password=db_password, host=db_host, dbname=db_name)
+    def __init__(self, db_user: str, db_password: str, db_host: str, db_name: str, db_port: int = 5432):
+        self.db = pg_driver.connect(user=db_user, password=db_password, host=db_host, dbname=db_name, port = db_port)
 
     def insert_card(self, word: str, translation: str, context: str, deck: str):
         command: str = "INSERT INTO Card(word,translation,context,deck_id) VALUES('{}', '{}', '{}', " \
