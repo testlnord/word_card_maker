@@ -1,0 +1,41 @@
+{
+
+  "manifest_version": 2,
+  "name": "StaticCard",
+  "version": "1.0",
+
+  "description": "Tries to meet the goals using different techniques",
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "icons": {
+    "48": "icons/border-48.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.wikipedia.org/*"],
+      "js": ["DoubleClickDec.js"]
+    }
+  ],
+
+  "browser_action": {
+    "default_icon": "icons/note-32.png",
+    "default_title": "Translate",
+    "default_popup": "popup/registration.html",
+    "popup": "popup/saveCard.html"
+  },
+
+  "permissions": ["*://developer.mozilla.org/*", "tabs", "contextMenus", "activeTab", "storage"],
+
+  "web_accessible_resources": [
+    "pictures/card.jpg"
+  ],
+
+  "options_ui": {
+    "page": "options.html"
+  }
+
+}
