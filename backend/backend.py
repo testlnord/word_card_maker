@@ -25,7 +25,7 @@ cardidparser = reqparse.RequestParser()
 cardidparser.add_argument('cardId', type=str, required=True, help='Card id cannot be blank')
 
 deckidparser = reqparse.RequestParser()
-deckidparser.add_argument('deckId', type=str, required=True, help='Deck id cannot be blank')
+deckidparser.add_argument('deck', type=str, required=True, help='Deck id cannot be blank')
 
 methods = database_methods.DatabaseMethods(settings.DB_USER, settings.DB_PASSWORD, settings.DB_HOST, settings.DB_NAME,
                                            settings.DB_PORT)
@@ -90,8 +90,8 @@ class Lesson(Resource):
     decorators = [jwt_required()]
 
     def get(self):
-        deck_id: str = deckidparser.parse_args()['deckId']
-        cards = methods.get_cards_from_deck(deck_id)
+        deck: str = deckidparser.parse_args()['deck']
+        cards = methods.get_cards_from_deck(deck)
         if not cards:
             return {}
         return {'cards': [{row[0]: row[1]} for row in cards]}

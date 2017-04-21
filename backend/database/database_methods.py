@@ -161,7 +161,7 @@ class DatabaseMethods:
         return word, translation, context
 
     def get_cards_from_deck(self, deck_id: str):
-        command: str = "SELECT id, word  FROM Card WHERE deck_id='{}'".format(deck_id)
+        command: str = "SELECT id, word  FROM Card WHERE deck_id=(SELECT id FROM Deck WHERE name = '{}')".format(deck_id)
         cards = []
         cur = self.db.cursor()
 
