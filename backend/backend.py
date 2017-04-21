@@ -17,8 +17,15 @@ parser.add_argument('translation', type=str)
 parser.add_argument('context', type=str)
 parser.add_argument('deck', type=str)
 
-langparser = reqparse.RequestParser()
-langparser.add_argument('lang', type=str, required=True, help='Language cannot be blank')
+settingparser = reqparse.RequestParser()
+settingparser.add_argument('targetLanguage', type=str, required=True, help='Target language cannot be blank')
+settingparser.add_argument('sourceLanguage', type=str, required=True, help='Source language cannot be blank')
+
+cardidparser = reqparse.RequestParser()
+cardidparser.add_argument('cardId', type=str, required=True, help='Card id cannot be blank')
+
+deckidparser = reqparse.RequestParser()
+deckidparser.add_argument('deckId', type=str, required=True, help='Deck id cannot be blank')
 
 methods = database_methods.DatabaseMethods(settings.DB_USER, settings.DB_PASSWORD, settings.DB_HOST, settings.DB_NAME,
                                            settings.DB_PORT)
@@ -58,7 +65,7 @@ class Translator(Resource):
 class Cards(Resource):
     decorators = [jwt_required()]
 
-    def post(self):
+    def put(self):
         word: str = parser.parse_args()['word']
         translation: str = parser.parse_args()['translation']
         context: str = parser.parse_args()['context']
@@ -73,19 +80,38 @@ class Cards(Resource):
 
         return {'word': word, 'translation': translation, 'context': context}
 
+    def get(self):
+        card_id: str = cardidparser.parse_args()['cardId']
+        card = methods.get_card_by_id(card_id)
+        return {'word': card[0], 'translation': card[1], 'context': card[2]}
 
-class Language(Resource):
+
+class Lesson(Resource):
+    decorators = [jwt_required()]
+
+    def get(self):
+        deck_id: str = deckidparser.parse_args()['deckId']
+        cards = methods.get_cards_from_deck(deck_id)
+        if not cards:
+            return {}
+        return {'cards': [{row[0]: row[1]} for row in cards]}
+
+
+class Settings(Resource):
     decorators = [jwt_required()]
 
     def post(self):
-        lang: str = langparser.parse_args()['lang']
+        lang_from: str = settingparser.parse_args()['sourceLanguage']
+        lang_to: str = settingparser.parse_args()['targetLanguage']
+        lang = "-".join([lang_from.lower(), lang_to.lower()])
         methods.set_language(current_identity.username, lang)
 
-        return {'lang': lang}
+        return {'language': lang}
 
 api.add_resource(Translator, '/dict/translation')
-api.add_resource(Cards, '/cards/add')
-api.add_resource(Language, '/settings/language')
+api.add_resource(Cards, '/cards')
+api.add_resource(Lesson, '/lesson')
+api.add_resource(Settings, '/settings')
 
 if __name__ == '__main__':
     app.run(debug=True, port=settings.SERVER_PORT, host=settings.SERVER_HOST)

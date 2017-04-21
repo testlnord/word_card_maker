@@ -7,7 +7,7 @@ import user_methods
 class DatabaseMethods:
 
     def __init__(self, db_user: str, db_password: str, db_host: str, db_name: str, db_port: int = 5432):
-        self.db = pg_driver.connect(user=db_user, password=db_password, host=db_host, dbname=db_name, port = db_port)
+        self.db = pg_driver.connect(user=db_user, password=db_password, host=db_host, dbname=db_name, port=db_port)
 
     def insert_card(self, word: str, translation: str, context: str, deck: str):
         command: str = "INSERT INTO Card(word,translation,context,deck_id) VALUES('{}', '{}', '{}', " \
@@ -140,3 +140,36 @@ class DatabaseMethods:
             self.db.commit()
             cur.close()
         return lang
+
+    def get_card_by_id(self, card_id: str):
+        command: str = "SELECT word, translation, context FROM Card WHERE id='{}'".format(card_id)
+        word = ""
+        translation = ""
+        context = ""
+        cur = self.db.cursor()
+
+        try:
+            cur.execute(command)
+            returned_data = cur.fetchone()
+            word = returned_data[0]
+            translation = returned_data[1]
+            context = returned_data[2]
+
+        finally:
+            self.db.commit()
+            cur.close()
+        return word, translation, context
+
+    def get_cards_from_deck(self, deck_id: str):
+        command: str = "SELECT id, word  FROM Card WHERE deck_id='{}'".format(deck_id)
+        cards = []
+        cur = self.db.cursor()
+
+        try:
+            cur.execute(command)
+            cards = cur.fetchall()
+
+        finally:
+            self.db.commit()
+            cur.close()
+        return cards
