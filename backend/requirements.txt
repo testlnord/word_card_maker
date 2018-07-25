@@ -15,7 +15,7 @@ Jinja2==2.7.2
 MarkupSafe==0.18
 packaging==16.8
 pep8==1.7.0
-Pillow==2.3.0
+Pillow==3.3.2
 postgres==2.2.1
 psycopg2==2.7.1
 PyJWT==1.4.2
